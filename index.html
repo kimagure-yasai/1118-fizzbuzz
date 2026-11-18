@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FizzBuzz (1〜50)</title>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --border-color: #e2e8f0;
+      
+      --fizz-color: #0284c7;
+      --fizz-bg: #e0f2fe;
+      --buzz-color: #d97706;
+      --buzz-bg: #fef3c7;
+      --fizzbuzz-color: #7c3aed;
+      --fizzbuzz-bg: linear-gradient(135deg, #ede9fe 0%, #fae8ff 100%);
+      --normal-color: #64748b;
+      --normal-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+
+    p.subtitle {
+      color: #64748b;
+      font-size: 1rem;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-fizz { background-color: var(--fizz-color); }
+    .dot-buzz { background-color: var(--buzz-color); }
+    .dot-fizzbuzz { background-color: var(--fizzbuzz-color); }
+    .dot-number { background-color: var(--normal-color); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-num {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .card-label {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* Style variants */
+    .card.is-fizz {
+      background: var(--fizz-bg);
+      border-color: #bae6fd;
+      color: var(--fizz-color);
+    }
+
+    .card.is-buzz {
+      background: var(--buzz-bg);
+      border-color: #fde68a;
+      color: var(--buzz-color);
+    }
+
+    .card.is-fizzbuzz {
+      background: var(--fizzbuzz-bg);
+      border-color: #ddd6fe;
+      color: var(--fizzbuzz-color);
+      font-size: 1.35rem;
+    }
+
+    .card.is-number {
+      color: var(--text-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>FizzBuzz (1〜50)</h1>
+      <p class="subtitle">1から50までの FizzBuzz をカード形式で一覧表示しています</p>
+    </header>
+
+    <div class="legend">
+      <span class="legend-item"><span class="dot dot-fizz"></span>Fizz (3の倍数)</span>
+      <span class="legend-item"><span class="dot dot-buzz"></span>Buzz (5の倍数)</span>
+      <span class="legend-item"><span class="dot dot-fizzbuzz"></span>FizzBuzz (15の倍数)</span>
+      <span class="legend-item"><span class="dot dot-number"></span>数値 (その他)</span>
+    </div>
+
+    <div id="fizzbuzz-grid" class="grid"></div>
+  </div>
+
+  <script>
+    function getFizzBuzz(n) {
+      if (n % 15 === 0) return { label: "FizzBuzz", className: "is-fizzbuzz" };
+      if (n % 3 === 0) return { label: "Fizz", className: "is-fizzbuzz-partial is-fizz" };
+      if (n % 5 === 0) return { label: "Buzz", className: "is-fizzbuzz-partial is-buzz" };
+      return { label: String(n), className: "is-number" };
+    }
+
+    function renderFizzBuzz(min = 1, max = 50) {
+      const container = document.getElementById("fizzbuzz-grid");
+      const fragment = document.createDocumentFragment();
+
+      for (let i = min; i <= max; i++) {
+        const item = getFizzBuzz(i);
+        const card = document.createElement("div");
+        card.className = `card ${item.className}`;
+        card.innerHTML = `
+          <span class="card-num">#${i}</span>
+          <span class="card-label">${item.label}</span>
+        `;
+        fragment.appendChild(card);
+      }
+
+      container.appendChild(fragment);
+    }
+
+    // ページロード時に即時実行
+    document.addEventListener("DOMContentLoaded", () => {
+      renderFizzBuzz(1, 50);
+    });
+  </script>
+</body>
+</html>
