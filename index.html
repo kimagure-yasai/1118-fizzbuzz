@@ -42,7 +42,7 @@
 
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     h1 {
@@ -55,6 +55,48 @@
     p.subtitle {
       color: #64748b;
       font-size: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-replay {
+      background-color: #0f172a;
+      color: #ffffff;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn-replay:hover {
+      background-color: #334155;
+    }
+
+    .btn-replay:active {
+      transform: scale(0.97);
+    }
+
+    .speed-select {
+      font-size: 0.85rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: #ffffff;
+      color: var(--text-color);
+      cursor: pointer;
     }
 
     .legend {
@@ -92,6 +134,18 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 1rem;
+      min-height: 400px;
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(12px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .card {
@@ -106,6 +160,7 @@
       justify-content: center;
       gap: 0.5rem;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -154,8 +209,20 @@
   <div class="container">
     <header>
       <h1>FizzBuzz (1〜50)</h1>
-      <p class="subtitle">1から50までの FizzBuzz をカード形式で一覧表示しています</p>
+      <p class="subtitle">1から50までの FizzBuzz が順番にアニメーション表示されます</p>
     </header>
+
+    <div class="controls">
+      <button id="btn-replay" class="btn-replay">
+        <span>▶ もう一度最初から表示</span>
+      </button>
+      <select id="speed-select" class="speed-select">
+        <option value="120">速度: ゆっくり (1枚0.12秒)</option>
+        <option value="70" selected>速度: ふつう (1枚0.07秒)</option>
+        <option value="30">速度: はやい (1枚0.03秒)</option>
+        <option value="0">速度: 一瞬で全表示</option>
+      </select>
+    </div>
 
     <div class="legend">
       <span class="legend-item"><span class="dot dot-fizz"></span>Fizz (3の倍数)</span>
@@ -175,11 +242,20 @@
       return { label: String(n), className: "is-number" };
     }
 
-    function renderFizzBuzz(min = 1, max = 50) {
+    let currentAnimationId = 0;
+
+    async function renderFizzBuzzSlowly(min = 1, max = 50) {
       const container = document.getElementById("fizzbuzz-grid");
-      const fragment = document.createDocumentFragment();
+      container.innerHTML = "";
+
+      const animId = ++currentAnimationId;
+      const speedSelect = document.getElementById("speed-select");
+      const delayMs = parseInt(speedSelect.value, 10);
 
       for (let i = min; i <= max; i++) {
+        // キャンセルされた場合は中断
+        if (animId !== currentAnimationId) return;
+
         const item = getFizzBuzz(i);
         const card = document.createElement("div");
         card.className = `card ${item.className}`;
@@ -187,15 +263,24 @@
           <span class="card-num">#${i}</span>
           <span class="card-label">${item.label}</span>
         `;
-        fragment.appendChild(card);
-      }
+        container.appendChild(card);
 
-      container.appendChild(fragment);
+        if (delayMs > 0) {
+          await new Promise(resolve => setTimeout(resolve, delayMs));
+        }
+      }
     }
 
-    // ページロード時に即時実行
     document.addEventListener("DOMContentLoaded", () => {
-      renderFizzBuzz(1, 50);
+      renderFizzBuzzSlowly(1, 50);
+
+      document.getElementById("btn-replay").addEventListener("click", () => {
+        renderFizzBuzzSlowly(1, 50);
+      });
+
+      document.getElementById("speed-select").addEventListener("change", () => {
+        renderFizzBuzzSlowly(1, 50);
+      });
     });
   </script>
 </body>
