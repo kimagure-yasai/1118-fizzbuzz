@@ -6,20 +6,31 @@
   <title>FizzBuzz ゲーム & 一覧</title>
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --panel-bg: #1e293b;
-      --text-color: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
+      --bg-color: #f8fafc;
+      --panel-bg: #ffffff;
+      --card-bg: #ffffff;
+      --text-color: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
       
-      --fizz-color: #38bdf8;
-      --buzz-color: #fbbf24;
-      --fizzbuzz-color: #c084fc;
-      --number-color: #94a3b8;
-      --accent-color: #38bdf8;
-      --success-color: #4ade80;
-      --error-color: #f87171;
+      --fizz-color: #0284c7;
+      --fizz-bg: #f0f9ff;
+      --fizz-border: #bae6fd;
+
+      --buzz-color: #d97706;
+      --buzz-bg: #fffbeb;
+      --buzz-border: #fde68a;
+
+      --fizzbuzz-color: #7c3aed;
+      --fizzbuzz-bg: #faf5ff;
+      --fizzbuzz-border: #e9d5ff;
+
+      --number-color: #334155;
+      --number-bg: #f8fafc;
+      --number-border: #cbd5e1;
+
+      --success-color: #16a34a;
+      --error-color: #dc2626;
     }
 
     * {
@@ -37,7 +48,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.5rem 1rem;
+      padding: 2rem 1rem;
     }
 
     .container {
@@ -54,22 +65,23 @@
     }
 
     .tab-btn {
-      background: transparent;
+      background: #ffffff;
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       padding: 0.6rem 1.4rem;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       border-radius: 9999px;
       cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       transition: all 0.2s ease;
     }
 
     .tab-btn.active {
-      background: #38bdf8;
-      color: #0f172a;
-      border-color: #38bdf8;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
     }
 
     /* ゲームエリア */
@@ -77,9 +89,9 @@
       background: var(--panel-bg);
       border: 1px solid var(--border-color);
       border-radius: 20px;
-      padding: 2rem 1.5rem;
+      padding: 2.2rem 1.8rem;
       text-align: center;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
       position: relative;
       overflow: hidden;
     }
@@ -88,7 +100,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--border-color);
       font-size: 0.95rem;
@@ -99,21 +111,21 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: #0f172a;
-      padding: 0.4rem 0.8rem;
+      background: #f1f5f9;
+      padding: 0.4rem 0.9rem;
       border-radius: 8px;
       border: 1px solid var(--border-color);
     }
 
     .stat-val {
       font-weight: 700;
-      color: #ffffff;
+      color: #0f172a;
       font-variant-numeric: tabular-nums;
     }
 
     /* 数字ディスプレイ */
     .target-display {
-      min-height: 200px;
+      min-height: 190px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -123,12 +135,11 @@
     }
 
     .target-number {
-      font-size: 6rem;
+      font-size: 6.5rem;
       font-weight: 900;
       line-height: 1;
       letter-spacing: -2px;
-      color: #ffffff;
-      text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      color: #0f172a;
       transition: transform 0.1s ease;
     }
 
@@ -146,7 +157,7 @@
       font-size: 1.25rem;
       font-weight: 700;
       min-height: 2rem;
-      margin-top: 0.5rem;
+      margin-top: 0.6rem;
       transition: all 0.2s;
     }
 
@@ -158,8 +169,8 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
-      max-width: 600px;
-      margin: 0 auto 1.5rem auto;
+      max-width: 620px;
+      margin: 0 auto 1rem auto;
     }
 
     @media (min-width: 640px) {
@@ -169,80 +180,86 @@
     }
 
     .action-btn {
-      background: #0f172a;
+      background: #ffffff;
       border: 2px solid var(--border-color);
       border-radius: 14px;
       padding: 1.2rem 0.8rem;
-      color: #ffffff;
+      color: var(--text-color);
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
       transition: all 0.1s ease;
       position: relative;
     }
 
     .action-btn:hover {
-      border-color: #64748b;
       transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
     }
 
     .action-btn:active, .action-btn.pressed {
       transform: translateY(2px) scale(0.98);
-      filter: brightness(1.2);
+      box-shadow: none;
     }
 
     .btn-fizz {
-      border-color: rgba(56, 189, 248, 0.4);
+      background: var(--fizz-bg);
+      border-color: var(--fizz-border);
+      color: var(--fizz-color);
     }
     .btn-fizz:hover, .btn-fizz.pressed {
       border-color: var(--fizz-color);
-      background: rgba(56, 189, 248, 0.15);
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.2);
     }
 
     .btn-buzz {
-      border-color: rgba(251, 191, 36, 0.4);
+      background: var(--buzz-bg);
+      border-color: var(--buzz-border);
+      color: var(--buzz-color);
     }
     .btn-buzz:hover, .btn-buzz.pressed {
       border-color: var(--buzz-color);
-      background: rgba(251, 191, 36, 0.15);
-      box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2);
     }
 
     .btn-fizzbuzz {
-      border-color: rgba(192, 132, 252, 0.4);
+      background: var(--fizzbuzz-bg);
+      border-color: var(--fizzbuzz-border);
+      color: var(--fizzbuzz-color);
     }
     .btn-fizzbuzz:hover, .btn-fizzbuzz.pressed {
       border-color: var(--fizzbuzz-color);
-      background: rgba(192, 132, 252, 0.15);
-      box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.2);
     }
 
     .btn-number {
-      border-color: rgba(148, 163, 184, 0.4);
+      background: var(--number-bg);
+      border-color: var(--number-border);
+      color: var(--number-color);
     }
     .btn-number:hover, .btn-number.pressed {
-      border-color: #cbd5e1;
-      background: rgba(148, 163, 184, 0.15);
+      border-color: #94a3b8;
+      box-shadow: 0 4px 14px rgba(100, 116, 139, 0.15);
     }
 
     .btn-title {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
     }
 
     .key-badge {
       display: inline-block;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: #ffffff;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 0.2rem 0.5rem;
+      padding: 0.25rem 0.55rem;
       font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      color: #cbd5e1;
+      color: #475569;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     /* ゲームオーバー / スタートオーバーレイ */
@@ -252,8 +269,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.94);
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(6px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -271,42 +288,48 @@
       font-size: 2.5rem;
       font-weight: 900;
       margin-bottom: 0.8rem;
+      color: #0f172a;
     }
 
     .overlay p {
       color: var(--text-muted);
       font-size: 1.05rem;
       max-width: 480px;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
+      line-height: 1.7;
+      margin-bottom: 1.8rem;
     }
 
     .btn-start {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-      color: #0f172a;
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+      color: #ffffff;
       border: none;
       border-radius: 9999px;
-      padding: 0.9rem 2.4rem;
+      padding: 0.95rem 2.5rem;
       font-size: 1.15rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+      box-shadow: 0 4px 18px rgba(2, 132, 199, 0.35);
       transition: transform 0.1s ease, box-shadow 0.2s ease;
     }
 
     .btn-start:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.7);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-start:active {
+      transform: translateY(1px);
     }
 
     .result-score {
       font-size: 1.25rem;
-      margin-bottom: 1.5rem;
-      background: #1e293b;
-      padding: 1rem 2rem;
-      border-radius: 12px;
+      margin-bottom: 1.8rem;
+      background: #f8fafc;
+      padding: 1.2rem 2.2rem;
+      border-radius: 14px;
       border: 1px solid var(--border-color);
-      line-height: 1.8;
+      line-height: 1.9;
+      color: #1e293b;
     }
 
     /* 一覧モード */
@@ -321,6 +344,12 @@
     .list-header {
       text-align: center;
       margin-bottom: 1.5rem;
+    }
+
+    .list-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0f172a;
     }
 
     .legend {
@@ -340,7 +369,8 @@
       padding: 0.35rem 0.75rem;
       border-radius: 9999px;
       border: 1px solid var(--border-color);
-      background: var(--card-bg);
+      background: #ffffff;
+      color: #334155;
     }
 
     .dot {
@@ -352,7 +382,7 @@
     .dot-fizz { background-color: var(--fizz-color); }
     .dot-buzz { background-color: var(--buzz-color); }
     .dot-fizzbuzz { background-color: var(--fizzbuzz-color); }
-    .dot-number { background-color: var(--number-color); }
+    .dot-number { background-color: #64748b; }
 
     .grid {
       display: grid;
@@ -361,7 +391,7 @@
     }
 
     .card {
-      background: var(--card-bg);
+      background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1rem 0.8rem;
@@ -370,15 +400,36 @@
       flex-direction: column;
       align-items: center;
       gap: 0.3rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: transform 0.15s ease;
     }
 
-    .card.is-fizz { border-color: var(--fizz-color); color: var(--fizz-color); }
-    .card.is-buzz { border-color: var(--buzz-color); color: var(--buzz-color); }
-    .card.is-fizzbuzz { border-color: var(--fizzbuzz-color); color: var(--fizzbuzz-color); font-weight: 700; }
-    .card.is-number { color: var(--text-color); }
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card.is-fizz {
+      background: var(--fizz-bg);
+      border-color: var(--fizz-border);
+      color: var(--fizz-color);
+    }
+    .card.is-buzz {
+      background: var(--buzz-bg);
+      border-color: var(--buzz-border);
+      color: var(--buzz-color);
+    }
+    .card.is-fizzbuzz {
+      background: var(--fizzbuzz-bg);
+      border-color: var(--fizzbuzz-border);
+      color: var(--fizzbuzz-color);
+      font-weight: 700;
+    }
+    .card.is-number {
+      color: var(--text-color);
+    }
 
     .card-num { font-size: 0.75rem; color: var(--text-muted); }
-    .card-label { font-size: 1.1rem; font-weight: 700; }
+    .card-label { font-size: 1.15rem; font-weight: 700; }
 
     /* シェイク演出 */
     @keyframes shake {
@@ -435,22 +486,22 @@
       <div class="buttons-grid">
         <button id="btn-choice-num" class="action-btn btn-number" data-choice="num">
           <span class="btn-title">そのまま (数値)</span>
-          <span class="key-badge">キー [ 1 ] または [ Space ]</span>
+          <span class="key-badge">キー [ 1 ] / [ Space ]</span>
         </button>
 
         <button id="btn-choice-fizz" class="action-btn btn-fizz" data-choice="fizz">
-          <span class="btn-title" style="color: var(--fizz-color);">Fizz</span>
-          <span class="key-badge">キー [ 2 ] または [ F ]</span>
+          <span class="btn-title">Fizz</span>
+          <span class="key-badge">キー [ 2 ] / [ F ]</span>
         </button>
 
         <button id="btn-choice-buzz" class="action-btn btn-buzz" data-choice="buzz">
-          <span class="btn-title" style="color: var(--buzz-color);">Buzz</span>
-          <span class="key-badge">キー [ 3 ] または [ B ]</span>
+          <span class="btn-title">Buzz</span>
+          <span class="key-badge">キー [ 3 ] / [ B ]</span>
         </button>
 
         <button id="btn-choice-fizzbuzz" class="action-btn btn-fizzbuzz" data-choice="fizzbuzz">
-          <span class="btn-title" style="color: var(--fizzbuzz-color);">FizzBuzz</span>
-          <span class="key-badge">キー [ 4 ] または [ Z ]</span>
+          <span class="btn-title">FizzBuzz</span>
+          <span class="key-badge">キー [ 4 ] / [ Z ]</span>
         </button>
       </div>
     </div>
@@ -625,7 +676,7 @@
       if (errors > 15) rank = "C";
 
       resultScoreEl.innerHTML = `
-        ランク: <b style="font-size: 2rem; color: #f59e0b;">${rank}</b><br>
+        ランク: <b style="font-size: 2rem; color: #d97706;">${rank}</b><br>
         タイム: <b>${totalTime} 秒</b><br>
         ミス回数: <b>${errors} 回</b><br>
         最大コンボ: <b>${maxCombo} 連続</b>
